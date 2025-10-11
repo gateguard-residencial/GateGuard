@@ -1,7 +1,12 @@
-## Descripción
-¿Qué cambios introduces?
+## Contexto
+- Historia / Issue:
+- Tipo de cambio: [Feature|Fix|Chore]
 
 ## Checklist
-- [ ] Código compila
-- [ ] Tests corren
-- [ ] Sigue las convenciones de commits
+- [ ] Compila sin errores
+- [ ] Pruebas pasan en CI
+- [ ] Revisado por al menos 1 persona
+- [ ] Convención de commits respetada
+
+## Evidencia
+- Resultados CI: (captura o enlace)
