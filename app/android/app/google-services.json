@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "523933472075",
+    "project_id": "gateguard-2064c",
+    "storage_bucket": "gateguard-2064c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:523933472075:android:4ad744636eb2681c2e44ce",
+        "android_client_info": {
+          "package_name": "com.gateguard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDlNYOjTAYTwxW1avB4tUo9YRVvXVynn8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
