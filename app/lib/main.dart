@@ -23,7 +23,7 @@ class GateGuardApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromARGB(255, 12, 47, 82), // Azul obscuro
-          primary: const Color.fromARGB(255, 3, 92, 182),
+          primary: const Color.fromARGB(255, 15, 26, 37),
           secondary: const Color.fromARGB(255, 13, 89, 16), // Verde claro
           tertiary: const Color.fromARGB(255, 6, 57, 9), // Azul claro
         ),
