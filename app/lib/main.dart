@@ -4,6 +4,7 @@ import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/home_screen.dart';
+import 'services/qr_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,8 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // Intentar iniciar sesión con Firebase
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _usernameController.text.trim(),
         password: _passwordController.text.trim(),
       );
@@ -517,14 +517,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptTerms = false;
-  String _selectedUserType = 'Residente';
-
-  final List<String> _userTypes = [
-    'Residente',
-    'Visitante',
-    'Personal de Seguridad',
-    'Administrador'
-  ];
 
   @override
   void dispose() {
@@ -562,9 +554,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'name': _nameController.text.trim(),
         'phone': _phoneController.text.trim(),
         'address': _addressController.text.trim(),
-        'userType': _selectedUserType,
+        'userType': 'Residente',
         'email': _emailController.text.trim(),
       });
+
+      // Generar y guardar el código QR único para el residente
+      await QRService.generateAndSaveQR();
 
       Navigator.pop(context); // cerrar loader
       ScaffoldMessenger.of(context).showSnackBar(
@@ -744,8 +739,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _buildPasswordField(),
               const SizedBox(height: 16),
               _buildConfirmPasswordField(),
-              const SizedBox(height: 16),
-              _buildUserTypeField(),
               const SizedBox(height: 20),
               _buildTermsCheckbox(),
               const SizedBox(height: 24),
@@ -934,33 +927,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildUserTypeField() {
-    return DropdownButtonFormField<String>(
-      value: _selectedUserType,
-      decoration: InputDecoration(
-        labelText: 'Tipo de Usuario',
-        prefixIcon: const Icon(Icons.person_outline),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 2),
-        ),
-      ),
-      items: _userTypes.map((String type) {
-        return DropdownMenuItem<String>(
-          value: type,
-          child: Text(type),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          _selectedUserType = newValue!;
-        });
-      },
-    );
-  }
 
   Widget _buildTermsCheckbox() {
     return Row(
