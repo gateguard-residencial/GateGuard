@@ -28,12 +28,12 @@ jobs:
 
       # 4️⃣ Instalar dependencias
       - name: Install dependencies
-        run: flutter pub get
+        run: cd app && flutter pub get
 
       # 5️⃣ Analizar el código
       - name: Analyze
-        run: flutter analyze
+        run: cd app && flutter analyze
 
       # 6️⃣ Ejecutar tests
       - name: Run tests
-        run: flutter test
+        run: cd app && flutter test
