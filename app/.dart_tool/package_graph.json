@@ -11,7 +11,8 @@
         "cupertino_icons",
         "firebase_auth",
         "firebase_core",
-        "flutter"
+        "flutter",
+        "qr_flutter"
       ],
       "devDependencies": [
         "flutter_lints",
@@ -41,6 +42,14 @@
         "stream_channel",
         "test_api",
         "vector_math"
+      ]
+    },
+    {
+      "name": "qr_flutter",
+      "version": "4.1.0",
+      "dependencies": [
+        "flutter",
+        "qr"
       ]
     },
     {
@@ -182,6 +191,13 @@
         "stream_channel",
         "string_scanner",
         "term_glyph"
+      ]
+    },
+    {
+      "name": "qr",
+      "version": "3.0.2",
+      "dependencies": [
+        "meta"
       ]
     },
     {
