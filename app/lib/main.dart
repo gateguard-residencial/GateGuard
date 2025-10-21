@@ -188,7 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFFE3F2FD), // Azul muy claro
+              Color.fromARGB(255, 218, 234, 246), // Azul muy claro
               Color(0xFFF1F8E9), // Verde muy claro
             ],
           ),
