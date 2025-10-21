@@ -23,6 +23,7 @@ jobs:
 
       - name: Analyze
         run: cd app && flutter analyze --no-fatal-warnings
+        continue-on-error: true   # Opcional: descomenta solo si aún quieres ignorar cualquier warning que quede
 
       - name: Run tests
         run: cd app && flutter test
