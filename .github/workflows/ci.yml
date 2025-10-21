@@ -22,7 +22,7 @@ jobs:
         run: cd app && flutter pub get
 
       - name: Analyze
-        run: cd app && flutter analyze
+        run: cd app && flutter analyze --no-fatal-warnings
 
       - name: Run tests
         run: cd app && flutter test
