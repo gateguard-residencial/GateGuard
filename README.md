@@ -15,6 +15,7 @@ Además, se busca **agilizar el registro y la entrada de residentes** mediante r
 ### Pasos
 ```bash
 # Entrar a la carpeta de la app
+# Probando cambios
 cd app
 
 # Descargar dependencias

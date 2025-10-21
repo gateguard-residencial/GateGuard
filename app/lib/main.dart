@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'screens/home_screen.dart';
+import 'screens/email_verification_screen.dart';
+import 'services/email_verification_service.dart';
+import 'screens/terms_and_conditions_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,8 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       // Intentar iniciar sesión con Firebase
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _usernameController.text.trim(),
         password: _passwordController.text.trim(),
       );
@@ -517,14 +518,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _acceptTerms = false;
-  String _selectedUserType = 'Residente';
-
-  final List<String> _userTypes = [
-    'Residente',
-    'Visitante',
-    'Personal de Seguridad',
-    'Administrador'
-  ];
 
   @override
   void dispose() {
@@ -547,46 +540,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
         builder: (_) => const Center(child: CircularProgressIndicator()),
       );
 
-      // Crear usuario con email y password
-      UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Guardar info adicional en Firestore
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userCredential.user!.uid)
-          .set({
-        'name': _nameController.text.trim(),
-        'phone': _phoneController.text.trim(),
-        'address': _addressController.text.trim(),
-        'userType': _selectedUserType,
-        'email': _emailController.text.trim(),
-      });
-
+      // Enviar código de verificación por email
+      final email = _emailController.text.trim();
+      final userName = _nameController.text.trim();
+      final success = await EmailVerificationService.sendVerificationCode(email, userName: userName);
+      
       Navigator.pop(context); // cerrar loader
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('¡Registro exitoso!'),
-          backgroundColor: Color(0xFF4CAF50),
-        ),
-      );
 
-      Navigator.pop(context); // volver al login
-    } on FirebaseAuthException catch (e) {
-      Navigator.pop(context); // cerrar loader
-      String message = '';
-      if (e.code == 'email-already-in-use') {
-        message = 'El correo ya está registrado.';
-      } else if (e.code == 'weak-password') {
-        message = 'La contraseña es muy débil.';
+      if (success) {
+        // Navegar a pantalla de verificación
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => EmailVerificationScreen(
+              email: email,
+              name: _nameController.text.trim(),
+              phone: _phoneController.text.trim(),
+              address: _addressController.text.trim(),
+              password: _passwordController.text.trim(),
+            ),
+          ),
+        );
       } else {
-        message = 'Error: ${e.message}';
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error al enviar código de verificación'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
+    } catch (e) {
+      Navigator.pop(context); // cerrar loader
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text('Error inesperado: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   } else if (!_acceptTerms) {
@@ -744,8 +733,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               _buildPasswordField(),
               const SizedBox(height: 16),
               _buildConfirmPasswordField(),
-              const SizedBox(height: 16),
-              _buildUserTypeField(),
               const SizedBox(height: 20),
               _buildTermsCheckbox(),
               const SizedBox(height: 24),
@@ -934,35 +921,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildUserTypeField() {
-    return DropdownButtonFormField<String>(
-      value: _selectedUserType,
-      decoration: InputDecoration(
-        labelText: 'Tipo de Usuario',
-        prefixIcon: const Icon(Icons.person_outline),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Color(0xFF1976D2), width: 2),
-        ),
-      ),
-      items: _userTypes.map((String type) {
-        return DropdownMenuItem<String>(
-          value: type,
-          child: Text(type),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          _selectedUserType = newValue!;
-        });
-      },
-    );
-  }
 
-  Widget _buildTermsCheckbox() {
+Widget _buildTermsCheckbox() {
     return Row(
       children: [
         Checkbox(
@@ -976,7 +936,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         Expanded(
           child: GestureDetector(
-            onTap: _showTermsDialog,
+            // --- 3. ESTA ES LA PARTE QUE CAMBIA ---
+            // En lugar de llamar a _showTermsDialog, ahora navegas a la nueva pantalla.
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TermsAndConditionsScreen()),
+              );
+            },
             child: RichText(
               text: TextSpan(
                 style: const TextStyle(
@@ -992,10 +959,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       fontWeight: FontWeight.w600,
                       decoration: TextDecoration.underline,
                     ),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
           ),
         ),
       ],

@@ -1,0 +1,13 @@
+# ========================================
+# TEMPLATE DE COMMIT
+# ========================================
+
+# Formato: <tipo>[alcance opcional]: mensaje corto
+# Tipos: feat, fix, docs, style, refactor, test, chore
+# Alcance (opcional): parte del proyecto afectada
+# Mensaje: breve descripción del cambio en imperativo, sin punto final
+
+# Ejemplos:
+# feat(login): agregar validación de email
+# fix(api): corregir error al recibir datos nulos
+# docs(readme): actualizar instrucciones de instalación
