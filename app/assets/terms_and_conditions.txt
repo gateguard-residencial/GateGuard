@@ -1,0 +1,35 @@
+AVISO DE PRIVACIDAD INTEGRAL
+GateGuard Residencial
+Responsable de la Protección de sus Datos Personales:
+GateGuard Residencial (en adelante, la “Aplicación”), con domicilio en Centro número 1, San Juan del Río, Querétaro, 76800, es el responsable del tratamiento y protección de sus datos personales.
+Datos Personales Recabados:
+Para residentes y administradores, GateGuard Residencial recabará:
+1.	Datos de Identificación: Nombre completo, domicilio (número de lote/casa/departamento), número de teléfono y correo electrónico.
+2.	Datos de Autenticación: Contraseña cifrada, necesaria para acceder y operar la Aplicación.
+Datos de Visitantes (Tratamiento Limitado):
+GateGuard Residencial NO almacena de manera permanente los datos personales de los visitantes. Los datos de identificación (nombre del visitante, placas del vehículo) proporcionados por los residentes a través del bot de Telegram para la generación de accesos temporales son tratados únicamente para la finalidad de permitir y registrar su acceso puntual a la residencial. Estos datos se eliminan una vez transcurrido el periodo de tiempo limitado para el que fueron autorizados o inmediatamente después de su salida, sin que se guarden registros históricos de estos en la base de datos de la Aplicación.
+Finalidades del Tratamiento de Datos:
+Los datos personales que recabamos serán utilizados para las siguientes finalidades necesarias para la prestación del servicio:
+1.	Gestión de Acceso: Permitir la identificación de residentes y administradores para el uso de la Aplicación.
+2.	Control de Seguridad Residencial: Registrar la entrada y salida de visitantes (solo durante el tiempo limitado de su autorización) y residentes, mejorando la seguridad y la convivencia.
+3.	Comunicación: Enviar notificaciones, avisos y comunicados relacionados con la operación, seguridad o administración de la residencial.
+4.	Administración: Facilitar a los administradores la gestión y operación eficiente de los servicios de la residencial.
+Consentimiento Informado (Artículo 8 LFPDPPP):
+Al utilizar, registrarse y/o proporcionar sus datos personales a través de la Aplicación GateGuard Residencial, usted otorga su consentimiento expreso para que sus datos personales sean tratados conforme a las finalidades descritas en este Aviso de Privacidad. La información se presenta de manera clara y accesible para su lectura y aceptación.
+Seguridad de los Datos Personales:
+GateGuard Residencial se compromete a salvaguardar la privacidad de sus datos personales. Hemos implementado y mantenemos rigurosas medidas de seguridad administrativas, técnicas y físicas para proteger sus datos personales contra daño, pérdida, alteración, destrucción o el uso, acceso o tratamiento no autorizado.
+•	Cifrado: Se utilizan protocolos de cifrado estándar de la industria para la transmisión de datos (tipo AES) y para el almacenamiento de datos sensibles, como contraseñas.
+•	Acceso Restringido: El acceso a los datos está limitado solo al personal autorizado que requiera conocer dicha información para el cumplimiento de sus funciones.
+Retención de Datos:
+Sus datos personales de residente/administrador serán conservados únicamente por el tiempo estrictamente necesario para cumplir con las finalidades descritas y mientras usted mantenga una relación activa con la Aplicación. Una vez que su cuenta sea cancelada y la finalidad de su tratamiento haya concluido, sus datos serán bloqueados y posteriormente eliminados, conforme a lo establecido por la ley.
+Derechos ARCO (Acceso, Rectificación, Cancelación y Oposición):
+Usted tiene derecho a conocer qué datos personales tenemos de usted, para qué los utilizamos y las condiciones del uso que les damos (Acceso). Asimismo, es su derecho solicitar la corrección de su información personal en caso de que esté desactualizada, sea inexacta o incompleta (Rectificación); que la eliminemos de nuestros registros o bases de datos cuando considere que la misma no está siendo utilizada adecuadamente (Cancelación); así como oponerse al uso de sus datos personales para fines específicos (Oposición).
+•	Ejercicio: Para el ejercicio de cualquiera de los derechos ARCO, usted podrá realizar la solicitud directamente a través de las opciones que la propia Aplicación GateGuard Residencial le proporcione (p. ej., actualización de datos de perfil), o bien, presentando su solicitud por escrito al correo electrónico: contacto@gateguard.mx
+•	Mecanismo en la App: La Aplicación permite el acceso y modificación de sus datos de perfil (rectificación) directamente desde la sección de usuario.
+Transferencia de Datos Personales:
+GateGuard Residencial no realizará transferencia de sus datos personales a terceros, salvo las excepciones previstas en la Ley, como requerimientos de autoridad competente debidamente fundados y motivados o en caso de requerirse para la operación propia de la plataforma (ej. servicios de hosting o almacenamiento en la nube), en cuyo caso, se asegurará mediante contrato que dichos terceros mantengan las mismas medidas de seguridad y confidencialidad que GateGuard Residencial.
+Notificación de Brechas de Seguridad:
+En caso de que ocurra una vulneración de seguridad en cualquier fase del tratamiento de los datos personales, GateGuard Residencial se compromete a informarle sin dilación, por correo electrónico o mediante notificación dentro de la Aplicación, de conformidad con lo establecido por el Artículo 20 de la LFPDPPP, para que usted pueda tomar las medidas correspondientes para la defensa de sus derechos.
+Cambios al Aviso de Privacidad:
+El presente Aviso de Privacidad puede sufrir modificaciones, cambios o actualizaciones derivadas de nuevos requerimientos legales; de nuestras propias necesidades por los productos o servicios que ofrecemos; de nuestras prácticas de privacidad; o por otras causas. Cualquier modificación a este aviso será notificada a través de la publicación del nuevo aviso en la Aplicación GateGuard Residencial y/o mediante correo electrónico a la dirección que nos haya proporcionado.
+Última Actualización: 20/10/2025
