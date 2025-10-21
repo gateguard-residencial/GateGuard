@@ -11,15 +11,35 @@ class VisitsService {
       final user = _auth.currentUser;
       if (user == null) return 0;
 
+      final todayStart = _getTodayStart();
+      final tomorrowStart = _getTomorrowStart();
+
+      // Consulta simplificada: solo por residentId y status, luego filtrar por fecha en memoria
       final querySnapshot = await _firestore
           .collection('visits')
           .where('residentId', isEqualTo: user.uid)
           .where('status', isEqualTo: 'pending')
-          .where('visitDate', isGreaterThanOrEqualTo: _getTodayStart())
-          .where('visitDate', isLessThan: _getTomorrowStart())
           .get();
+      
+      // Filtrar por fecha en memoria
+      final todayVisits = querySnapshot.docs.where((doc) {
+        final visitDate = doc.data()['visitDate'];
+        if (visitDate == null) return false;
+        
+        DateTime date;
+        if (visitDate is Timestamp) {
+          date = visitDate.toDate();
+        } else if (visitDate is DateTime) {
+          date = visitDate;
+        } else {
+          return false;
+        }
+        
+        return date.isAfter(todayStart.subtract(const Duration(milliseconds: 1))) && 
+               date.isBefore(tomorrowStart);
+      }).toList();
 
-      return querySnapshot.docs.length;
+      return todayVisits.length;
     } catch (e) {
       print('Error al obtener visitas pendientes: $e');
       return 0;
@@ -32,16 +52,60 @@ class VisitsService {
       final user = _auth.currentUser;
       if (user == null) return [];
 
+      final todayStart = _getTodayStart();
+      final tomorrowStart = _getTomorrowStart();
+
+      // Consulta simplificada: solo por residentId y status, luego filtrar por fecha en memoria
       final querySnapshot = await _firestore
           .collection('visits')
           .where('residentId', isEqualTo: user.uid)
           .where('status', isEqualTo: 'pending')
-          .where('visitDate', isGreaterThanOrEqualTo: _getTodayStart())
-          .where('visitDate', isLessThan: _getTomorrowStart())
-          .orderBy('visitDate')
           .get();
 
-      return querySnapshot.docs.map((doc) {
+      // Filtrar por fecha en memoria y ordenar
+      final todayVisits = querySnapshot.docs.where((doc) {
+        final visitDate = doc.data()['visitDate'];
+        if (visitDate == null) return false;
+        
+        DateTime date;
+        if (visitDate is Timestamp) {
+          date = visitDate.toDate();
+        } else if (visitDate is DateTime) {
+          date = visitDate;
+        } else {
+          return false;
+        }
+        
+        return date.isAfter(todayStart.subtract(const Duration(milliseconds: 1))) && 
+               date.isBefore(tomorrowStart);
+      }).toList();
+
+      // Ordenar por fecha
+      todayVisits.sort((a, b) {
+        final dateA = a.data()['visitDate'];
+        final dateB = b.data()['visitDate'];
+        
+        DateTime timeA, timeB;
+        if (dateA is Timestamp) {
+          timeA = dateA.toDate();
+        } else if (dateA is DateTime) {
+          timeA = dateA;
+        } else {
+          return 0;
+        }
+        
+        if (dateB is Timestamp) {
+          timeB = dateB.toDate();
+        } else if (dateB is DateTime) {
+          timeB = dateB;
+        } else {
+          return 0;
+        }
+        
+        return timeA.compareTo(timeB);
+      });
+
+      return todayVisits.map((doc) {
         final data = doc.data();
         return {
           'id': doc.id,
@@ -129,11 +193,11 @@ class VisitsService {
       final user = _auth.currentUser;
       if (user == null) return [];
 
+      // Consulta simplificada: solo por residentId, luego filtrar y ordenar en memoria
       Query query = _firestore
           .collection('visits')
           .where('residentId', isEqualTo: user.uid)
-          .orderBy('createdAt', descending: true)
-          .limit(limit);
+          .limit(limit * 2); // Obtener más para compensar el filtro en memoria
 
       if (status != null) {
         query = query.where('status', isEqualTo: status);
@@ -141,13 +205,47 @@ class VisitsService {
 
       final querySnapshot = await query.get();
 
-      return querySnapshot.docs.map((doc) {
+      // Convertir a lista y ordenar por createdAt en memoria
+      final visits = querySnapshot.docs.map((doc) {
         final data = doc.data() as Map<String, dynamic>;
         return {
           'id': doc.id,
           ...data,
         };
       }).toList();
+
+      // Ordenar por createdAt (más recientes primero)
+      visits.sort((a, b) {
+        final createdAtA = a['createdAt'];
+        final createdAtB = b['createdAt'];
+        
+        if (createdAtA == null && createdAtB == null) return 0;
+        if (createdAtA == null) return 1;
+        if (createdAtB == null) return -1;
+        
+        DateTime dateA, dateB;
+        if (createdAtA is Timestamp) {
+          dateA = createdAtA.toDate();
+        } else if (createdAtA is DateTime) {
+          dateA = createdAtA;
+        } else {
+          return 0;
+        }
+        
+        if (createdAtB is Timestamp) {
+          dateB = createdAtB.toDate();
+        } else if (createdAtB is DateTime) {
+          dateB = createdAtB;
+        } else {
+          return 0;
+        }
+        
+        return dateB.compareTo(dateA); // Descendente (más recientes primero)
+      });
+
+      // Limitar el resultado
+      final result = visits.take(limit).toList();
+      return result;
     } catch (e) {
       print('Error al obtener historial de visitas: $e');
       return [];

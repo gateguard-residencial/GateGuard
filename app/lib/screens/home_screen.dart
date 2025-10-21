@@ -4,6 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../services/qr_service.dart';
 import '../services/visits_service.dart';
+import '../services/encryption_service.dart';
+import 'visits_history_screen.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,9 +47,14 @@ class _HomeScreenState extends State<HomeScreen> {
         final pendingVisits = await VisitsService.getPendingVisits();
         
         if (userDoc.exists) {
+          final encryptedData = userDoc.data()!;
+          
+          // Descifrar datos sensibles
+          final decryptedData = EncryptionService.decryptUserData(encryptedData);
+          
           setState(() {
-            userName = userDoc.data()?['name'] ?? 'Usuario';
-            userAddress = userDoc.data()?['address'] ?? 'Fraccionamiento';
+            userName = decryptedData['name'] ?? 'Usuario';
+            userAddress = decryptedData['address'] ?? 'Fraccionamiento';
             userQRData = qrData;
             pendingVisitors = pendingCount;
             pendingVisitsList = pendingVisits;
@@ -74,11 +82,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _goToProfile() {
-    // TODO: Implementar navegación a perfil/configuraciones
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Próximamente: Configuraciones de perfil'),
-        backgroundColor: Color(0xFF4CAF50),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfileScreen(),
       ),
     );
   }
@@ -94,13 +101,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _viewAccessHistory() {
-    // TODO: Implementar historial de accesos
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Próximamente: Historial de accesos'),
-        backgroundColor: Color(0xFF4CAF50),
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const VisitsHistoryScreen(),
       ),
-    );
+    ).then((_) {
+      // Al volver del historial, refrescar estado de visitas
+      _refreshPendingVisits();
+    });
   }
 
   void _regenerateQR() async {
@@ -147,29 +156,36 @@ class _HomeScreenState extends State<HomeScreen> {
         pendingVisitors = pendingCount;
         pendingVisitsList = pendingVisits;
       });
-    } catch (_) {
+    } catch (e) {
       // Silently ignore refresh errors for now
     }
   }
 
   void _debugInsertTestVisitForResident() async {
     try {
+      final visitDate = DateTime.now().add(const Duration(minutes: 30));
+      
       await FirebaseFirestore.instance.collection('visits').add({
         'residentId': '0oP3xgBd2dPVUrL46VLQBcuiHZz1',
         'guestName': 'Invitado demo',
         'guestPhone': '5550001111',
-        'visitDate': DateTime.now().add(const Duration(hours: 1)),
+        'visitDate': visitDate,
         'status': 'pending',
         'createdAt': FieldValue.serverTimestamp(),
         'qrCode': '',
         'approvedAt': null,
         'approvedBy': null,
       });
+      
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Visita de prueba insertada')),
         );
       }
+      
+      // Esperar un poco para que la inserción se complete
+      await Future.delayed(const Duration(milliseconds: 500));
+      
       // Refrescar contador y lista de visitas pendientes
       await _refreshPendingVisits();
     } catch (e) {
@@ -621,17 +637,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+          Text(
                       'Historial de visitas',
-                      style: TextStyle(
+            style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w700,
                         color: Color(0xFF1A1F36),
                       ),
                     ),
-                    Text(
+          Text(
                       'Consulta tus registros de entradas y salidas',
-                      style: TextStyle(
+            style: TextStyle(
                         fontSize: 14,
                         color: Color(0xFF666666),
                       ),
