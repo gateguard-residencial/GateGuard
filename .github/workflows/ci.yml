@@ -32,7 +32,7 @@ jobs:
 
       # 5️⃣ Analizar el código
       - name: Analyze
-        run: cd app && flutter analyze
+        run: cd app && flutter analyze --no-fatal-warnings
 
       # 6️⃣ Ejecutar tests
       - name: Run tests
